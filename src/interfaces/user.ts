@@ -1,6 +1,6 @@
 import * as mongodb from "mongodb";
  
-export interface Employee {
+export interface User {
    fname: string;
    lname: string;
    dob: string;
@@ -8,5 +8,6 @@ export interface Employee {
    pno: string;
    email: string;
    role: "student" | "teacher";
+   password: string;
    _id?: mongodb.ObjectId;
 }
