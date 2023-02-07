@@ -17,7 +17,7 @@ export async function connectToDatabase(uri: string) {
     await applySchemaValidation(db);
 
     const usersCollection = db.collection<User>("users");
-    const postersCollection = db.collection<Poster>("users");
+    const postersCollection = db.collection<Poster>("posters");
     const comntsCollection = db.collection<Comnt>("comnts");
     collections.users = usersCollection;
     collections.posters = postersCollection;
@@ -37,20 +37,20 @@ async function applySchemaValidation(db: mongodb.Db) {
                 _id: {},
                 fname: {
                     bsonType: "string",
-                    description: "'fname' is required and is a string",
+                    description: "'fname' is required and is a string"
                 },
                 lname: {
                     bsonType: "string",
-                    description: "'lname' is required and is a string",
+                    description: "'lname' is required and is a string"
                 },
                 dob: {
                     bsonType: "string",
-                    description: "'dob' is required and is a string",
+                    description: "'dob' is required and is a string"
                 },
                 gender: {
                     bsonType: "string",
                     description: "'gender' is required and is a string",
-                    enum: ["male", "female"],
+                    enum: ["male", "female"]
                 },
                 pno: {
                     bsonType: "string",
@@ -59,6 +59,8 @@ async function applySchemaValidation(db: mongodb.Db) {
                 email: {
                     bsonType: "string",
                     description: "'email' is required and is a string",
+                    unique: true
+                    
                 },
                 position: {
                     bsonType: "string",
@@ -68,7 +70,7 @@ async function applySchemaValidation(db: mongodb.Db) {
                 role: {
                     bsonType: "string",
                     description: "'level' is required and is one of 'junior', 'mid', or 'senior'",
-                    enum: ["junior", "mid", "senior"],
+                    enum: ["junior", "mid", "senior"]
                 },
                 password: {
                     bsonType: "string",
@@ -89,15 +91,15 @@ async function applySchemaValidation(db: mongodb.Db) {
                 _id: {},
                 title: {
                     bsonType: "string",
-                    description: "'title' is required and is a string",
+                    description: "'title' is required and is a string"
                 },
                 question: {
                     bsonType: "string",
-                    description: "'question' is required and is a string",
+                    description: "'question' is required and is a string"
                 },
                 cmnts_id: {
                     bsonType: "string",
-                    description: "'cmnts' is required and is a string",
+                    description: "'cmnts' is required and is a string"
                 },
             },
         },
@@ -113,19 +115,19 @@ async function applySchemaValidation(db: mongodb.Db) {
                 _id: {},
                 uid: {
                     bsonType: "string",
-                    description: "'title' is required and is a string",
+                    description: "'title' is required and is a string"
                 },
                 msg: {
                     bsonType: "string",
-                    description: "'msg' is required and is a string",
+                    description: "'msg' is required and is a string"
                 },
                 time: {
                     bsonType: "string",
-                    description: "'time' is required and is a string",
+                    description: "'time' is required and is a string"
                 },
                 date: {
                     bsonType: "string",
-                    description: "'date' is required and is a string",
+                    description: "'date' is required and is a string"
                 },
             },
         },

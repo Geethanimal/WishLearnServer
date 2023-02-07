@@ -11,7 +11,7 @@ dotenv.config();
 
 const app = express();
  
-const { ATLAS_URI } = process.env;
+const  ATLAS_URI  = process.env.ATLAS_URI;
  
 if (!ATLAS_URI) {
    console.error("No ATLAS_URI environment variable has been defined in config.env");
@@ -29,8 +29,8 @@ connectToDatabase(ATLAS_URI)
  
        
        // start the Express server
-       app.listen(5200, () => {
-           console.log(`Server running at http://localhost:5200...`);
+       app.listen(5300, () => {
+           console.log(`Server running at http://localhost:5300...`);
        });
  
    })
