@@ -10,7 +10,7 @@ import { authenticate } from "../middleware/authentication";
 export const userRouter = express.Router();
 userRouter.use(express.json());
 
-const secret :any = process.env.TOKEN_KEY;
+const secret :any = "WishLearn E-Learning Platform";
 dotenv.config();
 
 // Register a User
@@ -38,7 +38,9 @@ userRouter.post("/register", async (req, res) => {
 // Login
 userRouter.post("/login", async (req, res) => {
     try {
-        const { email, password } = req.body;
+        let { email, password } = req.body;
+        console.log(req.body)
+
         const user = await collections.users.findOne({ email });
 
         if (!user) {
@@ -53,14 +55,15 @@ userRouter.post("/login", async (req, res) => {
 
         const token = jwt.sign({ uid: user._id, fname: user.fname, lname: user.lname, role: user.role, email: user.email }, secret, { expiresIn: '1h' });
         res.cookie('auth', token);
-        res.status(200).send(`Logged in as ${user.fname +" "+ user.lname}.`);
+        res.status(200).json(user);
     } catch (error:any) {
+        console.log(error);
         res.status(500).send(error.message);
     }
 });
 
 // Use the authenticate middleware
-userRouter.use(authenticate);
+// userRouter.use(authenticate);
 
 // Get All Users
 userRouter.get("/", async (_req, res) => {

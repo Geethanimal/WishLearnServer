@@ -2,11 +2,13 @@ import * as mongodb from "mongodb";
 import { User } from "./interfaces/user";
 import { Poster } from "./interfaces/poster";
 import { Comnt } from "./interfaces/comnt";
+import { OnlineClass } from "./interfaces/online_class";
 
 export const collections: {
     users?: mongodb.Collection<User> | any;
     posters?: mongodb.Collection<Poster> | any;
     comnts?: mongodb.Collection<Comnt> | any;
+    online_classes?: mongodb.Collection<OnlineClass> | any;
 } = {};
 
 export async function connectToDatabase(uri: string) {
@@ -19,9 +21,12 @@ export async function connectToDatabase(uri: string) {
     const usersCollection = db.collection<User>("users");
     const postersCollection = db.collection<Poster>("posters");
     const comntsCollection = db.collection<Comnt>("comnts");
+    const online_classesCollection = db.collection<OnlineClass>("online_classes");
+
     collections.users = usersCollection;
     collections.posters = postersCollection;
     collections.comnts = comntsCollection;
+    collections.online_classes = online_classesCollection;
 }
 
 // Update our existing collection with JSON schema validation so we know our documents will always match the shape of our Employee model, even if added elsewhere.
@@ -58,9 +63,8 @@ async function applySchemaValidation(db: mongodb.Db) {
                 },
                 email: {
                     bsonType: "string",
-                    description: "'email' is required and is a string",
-                    unique: true
-                    
+                    description: "'email' is required and is a string"
+
                 },
                 position: {
                     bsonType: "string",
@@ -105,11 +109,44 @@ async function applySchemaValidation(db: mongodb.Db) {
         },
     };
 
+    // JsonSchema Validation for online_class
+    const jsonSchema_online_class = {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["tid","title","day","time","students"],
+            additionalProperties: false,
+            properties: {
+                _id: {},
+                tid: {
+                    bsonType: "string",
+                    description: "'title' is required and is a string"
+                },
+                title: {
+                    bsonType: "string",
+                    description: "'title' is required and is a string"
+                },
+                day: {
+                    bsonType: "string",
+                    description: "'title' is required and is a string"
+                },
+                time: {
+                    bsonType: "string",
+                    description: "'title' is required and is a string"
+                },
+                students:{
+                    bsonType: "array"
+                }
+
+            },
+        },
+    };
+
+
     // JsonSchema Validation for Comnt
     const jsonSchema_Comnt = {
         $jsonSchema: {
             bsonType: "object",
-            required: ["uid", "msg", "time","date"],
+            required: ["uid", "msg", "time", "date"],
             additionalProperties: false,
             properties: {
                 _id: {},
@@ -158,6 +195,15 @@ async function applySchemaValidation(db: mongodb.Db) {
     }).catch(async (error: mongodb.MongoServerError) => {
         if (error.codeName === 'NamespaceNotFound') {
             await db.createCollection("comnts", { validator: jsonSchema_Comnt });
+        }
+    });
+
+    await db.command({
+        collMod: "online_classes",
+        validator: jsonSchema_online_class
+    }).catch(async (error: mongodb.MongoServerError) => {
+        if (error.codeName === 'NamespaceNotFound') {
+            await db.createCollection("online_classes", { validator: jsonSchema_online_class });
         }
     });
 }
